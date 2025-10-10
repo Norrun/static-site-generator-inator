@@ -28,7 +28,8 @@ class TestLogic(unittest.TestCase):
             ],
             new_nodes,
         )
-    def test_it_all(self):
+        
+    temp = """def test_it_all(self):
         text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
         result = logic.text_to_textnodes(text)
         self.assertListEqual(result,[
@@ -42,4 +43,4 @@ class TestLogic(unittest.TestCase):
     TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
     TextNode(" and a ", TextType.TEXT),
     TextNode("link", TextType.LINK, "https://boot.dev"),
-])
+])"""
