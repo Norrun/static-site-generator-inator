@@ -16,3 +16,21 @@ class TestParentNode(unittest.TestCase):
             parent_node.to_html(),
             "<div><span><b>grandchild</b></span></div>",
     )
+    
+    def test_tag_none_value_error(self):
+        child_node = LeafNode("p", "test")
+        parent_node = ParentNode(None,[child_node])
+        with self.assertRaises(ValueError):
+            parent_node.to_html()
+    
+    def test_children_none_value_error(self):
+        parent_node = ParentNode("div", None)
+        with self.assertRaises(ValueError):
+            parent_node.to_html()
+    
+    def test_props(self):
+        child_node = LeafNode("p", "test")
+        parent_node = ParentNode("div",[child_node],{"id": "main", "class": "container content", "style": "color:red; margin:0"})
+        self.assertEqual(parent_node.to_html(), "<div id=\"main\" class=\"container content\" style=\"color:red; margin:0\"><p>test</p></div>")
+
+    
