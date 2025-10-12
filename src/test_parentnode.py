@@ -32,5 +32,19 @@ class TestParentNode(unittest.TestCase):
         child_node = LeafNode("p", "test")
         parent_node = ParentNode("div",[child_node],{"id": "main", "class": "container content", "style": "color:red; margin:0"})
         self.assertEqual(parent_node.to_html(), "<div id=\"main\" class=\"container content\" style=\"color:red; margin:0\"><p>test</p></div>")
+    
+    def test_child_mix(self):
+        grand_child = LeafNode("p", "test")
+        child_node = ParentNode("div",[grand_child])
+        brother_node = LeafNode("h1", "testing")
+        parent_node = ParentNode("div", [brother_node,child_node])
+        self.assertEqual(parent_node.to_html(), "<div><h1>testing</h1><div><p>test</p></div></div>")
+
+    def test_child_mix_inner_props(self):
+        grand_child = LeafNode("p", "test")
+        child_node = ParentNode("div",[grand_child],{"id": "main", "class": "container content", "style": "color:red; margin:0"})
+        brother_node = LeafNode("h1", "testing")
+        parent_node = ParentNode("div", [brother_node,child_node])
+        self.assertEqual(parent_node.to_html(), "<div><h1>testing</h1><div id=\"main\" class=\"container content\" style=\"color:red; margin:0\"><p>test</p></div></div>")
 
     
