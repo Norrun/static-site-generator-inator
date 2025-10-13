@@ -28,19 +28,116 @@ class TestLogic(unittest.TestCase):
             ],
             new_nodes,
         )
+
+    def test_code_block_middle(self):
+        node = TextNode("This is text with a `code block` word", TextType.PLAIN)
+        new_nodes = logic.split_nodes_delimiter([node], "`", TextType.CODE)
+        expected = [
+            TextNode("This is text with a ", TextType.PLAIN),
+            TextNode("code block", TextType.CODE),
+            TextNode(" word", TextType.PLAIN),
+        ]
+        self.assertListEqual(new_nodes, expected)
+    
+    def test_bold_multiple(self):
+        node = TextNode("This is **bold** and this is also **bold**", TextType.PLAIN)
+        new_nodes = logic.split_nodes_delimiter([node], "**", TextType.BOLD)
+        expected = [
+            TextNode("This is ", TextType.PLAIN),
+            TextNode("bold", TextType.BOLD),
+            TextNode(" and this is also ", TextType.PLAIN),
+            TextNode("bold", TextType.BOLD),
+        ]
+        self.assertListEqual(new_nodes, expected)
+    
+    def test_delimiter_at_start(self):
+        node = TextNode("_italic_ at start", TextType.PLAIN)
+        new_nodes = logic.split_nodes_delimiter([node], "_", TextType.ITALIC)
+        expected = [
+            TextNode("italic", TextType.ITALIC),
+            TextNode(" at start", TextType.PLAIN),
+        ]
+        self.assertListEqual(new_nodes, expected)
+
+    def test_delimiter_at_end(self):
+        node = TextNode("at end **bold**", TextType.PLAIN)
+        new_nodes = logic.split_nodes_delimiter([node], "**", TextType.BOLD)
+        expected = [
+            TextNode("at end ", TextType.PLAIN),
+            TextNode("bold", TextType.BOLD),
+        ]
+        self.assertListEqual(new_nodes, expected)
+    
+    def test_only_delimited_text(self):
+        node = TextNode("**all bold**", TextType.PLAIN)
+        new_nodes = logic.split_nodes_delimiter([node], "**", TextType.BOLD)
+        expected = [
+            TextNode("all bold", TextType.BOLD),
+        ]
+        self.assertListEqual(new_nodes, expected)
+
+    def test_no_delimiter(self):
+        node = TextNode("plain text with no formatting", TextType.PLAIN)
+        new_nodes = logic.split_nodes_delimiter([node], "**", TextType.BOLD)
+        expected = [
+            TextNode("plain text with no formatting", TextType.PLAIN),
+        ]
+        self.assertListEqual(new_nodes, expected)
+    
+    def test_non_text_node_unchanged(self):
+        node = TextNode("already bold", TextType.BOLD)
+        new_nodes = logic.split_nodes_delimiter([node], "**", TextType.BOLD)
+        expected = [
+            TextNode("already bold", TextType.BOLD),
+        ]
+        self.assertListEqual(new_nodes, expected)
+    
+    def test_multiple_nodes_mixed(self):
+        nodes = [
+            TextNode("First `code` text", TextType.PLAIN),
+            TextNode("already italic", TextType.ITALIC),
+            TextNode("Second `code` text", TextType.PLAIN),
+        ]
+        new_nodes = logic.split_nodes_delimiter(nodes, "`", TextType.CODE)
+        expected = [
+            TextNode("First ", TextType.PLAIN),
+            TextNode("code", TextType.CODE),
+            TextNode(" text", TextType.PLAIN),
+            TextNode("already italic", TextType.ITALIC),
+            TextNode("Second ", TextType.PLAIN),
+            TextNode("code", TextType.CODE),
+            TextNode(" text", TextType.PLAIN),
+        ]
+        self.assertListEqual(new_nodes, expected)
+    
+    def test_unmatched_delimiter_raises_exception(self):
+        node = TextNode("This has **no closing delimiter", TextType.PLAIN)
+        with self.assertRaises(Exception):
+            logic.split_nodes_delimiter([node], "**", TextType.BOLD)
+    
+    def test_unmatched_delimiter_raises_exception(self):
+        node = TextNode("This has **no closing delimiter** on the **second one", TextType.PLAIN)
+        with self.assertRaises(Exception):
+            logic.split_nodes_delimiter([node], "**", TextType.BOLD)
+
+    
+
         
     temp = """def test_it_all(self):
         text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
         result = logic.text_to_textnodes(text)
         self.assertListEqual(result,[
-    TextNode("This is ", TextType.TEXT),
+    TextNode("This is ", TextType.PLAIN),
     TextNode("text", TextType.BOLD),
-    TextNode(" with an ", TextType.TEXT),
+    TextNode(" with an ", TextType.PLAIN),
     TextNode("italic", TextType.ITALIC),
-    TextNode(" word and a ", TextType.TEXT),
+    TextNode(" word and a ", TextType.PLAIN),
     TextNode("code block", TextType.CODE),
-    TextNode(" and an ", TextType.TEXT),
+    TextNode(" and an ", TextType.PLAIN),
     TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
-    TextNode(" and a ", TextType.TEXT),
+    TextNode(" and a ", TextType.PLAIN),
     TextNode("link", TextType.LINK, "https://boot.dev"),
 ])"""
+
+if __name__ == "__main__":
+    unittest.main()

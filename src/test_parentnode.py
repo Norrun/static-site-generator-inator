@@ -47,4 +47,5 @@ class TestParentNode(unittest.TestCase):
         parent_node = ParentNode("div", [brother_node,child_node])
         self.assertEqual(parent_node.to_html(), "<div><h1>testing</h1><div id=\"main\" class=\"container content\" style=\"color:red; margin:0\"><p>test</p></div></div>")
 
-    
+    if __name__ == "__main__":
+        unittest.main()

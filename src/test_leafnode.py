@@ -23,3 +23,6 @@ class TestLeafNode(unittest.TestCase):
     def test_leaf_multiple_props(self):
         node = LeafNode("a", "Link", {"href": "https://boot.dev", "target": "_blank"})
         self.assertEqual(node.to_html(),"<a href=\"https://boot.dev\" target=\"_blank\">Link</a>" )
+
+if __name__ == "__main__":
+    unittest.main()

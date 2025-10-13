@@ -20,3 +20,6 @@ class TestHTMLNode(unittest.TestCase):
         node = HTMLNode()
         with self.assertRaises(NotImplementedError):
             node.to_html()
+
+if __name__ == "__main__":
+    unittest.main()

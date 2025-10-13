@@ -11,3 +11,7 @@ class TestNodeSplit(unittest.TestCase):
     TextNode("bolded phrase", TextType.BOLD),
     TextNode(" in the middle", TextType.PLAIN),
 ])
+        
+
+if __name__ == "__main__":
+    unittest.main()
