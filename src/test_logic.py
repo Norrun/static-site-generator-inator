@@ -4,30 +4,7 @@ from textnode import TextNode, TextType
 
 
 class TestLogic(unittest.TestCase):
-    def test_regex_image(self):
-        maches = logic.extract_markdown_images("This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)")
-        self.assertEqual(maches, [("rick roll", "https://i.imgur.com/aKaOqIh.gif"), ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")])
-    def test_regex_link(self):
-        matches = logic.extract_markdown_links("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)")
-        self.assertListEqual(matches,[("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")])
-
-    def test_split_images(self):
-        node = TextNode(
-            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
-            TextType.PLAIN,
-        )
-        new_nodes = logic.split_nodes_image([node])
-        self.assertListEqual(
-            [
-                TextNode("This is text with an ", TextType.PLAIN),
-                TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
-                TextNode(" and another ", TextType.PLAIN),
-                TextNode(
-                    "second image", TextType.IMAGE, "https://i.imgur.com/3elNhQu.png"
-                ),
-            ],
-            new_nodes,
-        )
+    
 
     def test_code_block_middle(self):
         node = TextNode("This is text with a `code block` word", TextType.PLAIN)
@@ -115,12 +92,35 @@ class TestLogic(unittest.TestCase):
         with self.assertRaises(Exception):
             logic.split_nodes_delimiter([node], "**", TextType.BOLD)
     
-    def test_unmatched_delimiter_raises_exception(self):
+    def test_second_unmatched_delimiter_raises_exception(self):
         node = TextNode("This has **no closing delimiter** on the **second one", TextType.PLAIN)
         with self.assertRaises(Exception):
             logic.split_nodes_delimiter([node], "**", TextType.BOLD)
 
-    
+    def test_regex_image(self):
+        maches = logic.extract_markdown_images("This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)")
+        self.assertEqual(maches, [("rick roll", "https://i.imgur.com/aKaOqIh.gif"), ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")])
+    def test_regex_link(self):
+        matches = logic.extract_markdown_links("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)")
+        self.assertListEqual(matches,[("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")])
+
+    def test_split_images(self):
+        node = TextNode(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+            TextType.PLAIN,
+        )
+        new_nodes = logic.split_nodes_image([node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with an ", TextType.PLAIN),
+                TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" and another ", TextType.PLAIN),
+                TextNode(
+                    "second image", TextType.IMAGE, "https://i.imgur.com/3elNhQu.png"
+                ),
+            ],
+            new_nodes,
+        )
 
         
     temp = """def test_it_all(self):
