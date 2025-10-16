@@ -104,6 +104,17 @@ class TestLogic(unittest.TestCase):
         matches = logic.extract_markdown_links("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)")
         self.assertListEqual(matches,[("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")])
 
+    def test_extract_multiple_images(self):
+        text = "![first](url1) some text ![second](url2)"
+        matches = logic.extract_markdown_images(text)
+        self.assertListEqual([("first", "url1"), ("second", "url2")], matches)
+    
+    def test_extract_no_images(self):
+        text = "This is just plain text with no images"
+        matches = logic.extract_markdown_images(text)
+        self.assertListEqual([], matches)
+
+        
     def test_split_images(self):
         node = TextNode(
             "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
@@ -121,6 +132,8 @@ class TestLogic(unittest.TestCase):
             ],
             new_nodes,
         )
+
+    
 
         
     temp = """def test_it_all(self):
