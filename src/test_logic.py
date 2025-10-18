@@ -114,6 +114,15 @@ class TestLogic(unittest.TestCase):
         matches = logic.extract_markdown_images(text)
         self.assertListEqual([], matches)
 
+    def test_extract_link_with_image(self):
+        text = "[first](url1) some text ![second](url2)"
+        matches = logic.extract_markdown_links(text)
+        self.assertListEqual([("first", "url1")], matches)
+    
+    def test_extract_image_with_link(self):
+        text = "[first](url1) some text ![second](url2)"
+        matches = logic.extract_markdown_images(text)
+        self.assertListEqual([("second", "url2")], matches)
         
     def test_split_images(self):
         node = TextNode(
