@@ -142,7 +142,64 @@ class TestLogic(unittest.TestCase):
             new_nodes,
         )
 
+    def test_split_links(self):
+        node = TextNode(
+            "This is text with an [link](https://i.imgur.com/zjjcJKZ.png) and another [second link](https://i.imgur.com/3elNhQu.png)",
+            TextType.PLAIN,
+        )
+        new_nodes = logic.split_nodes_link([node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with an ", TextType.PLAIN),
+                TextNode("link", TextType.LINK, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" and another ", TextType.PLAIN),
+                TextNode(
+                    "second link", TextType.LINK, "https://i.imgur.com/3elNhQu.png"
+                ),
+            ],
+            new_nodes,
+        )
     
+    def test_split_link_none(self):
+        node = TextNode("Just plain text.", TextType.PLAIN)
+        self.assertEqual(logic.split_nodes_link([node]) , [node])
+
+    def test_split_image_none(self):
+        node = TextNode("Just plain text.", TextType.PLAIN)
+        self.assertEqual(logic.split_nodes_image([node]) , [node])
+    
+    def test_split_link_start_end(self):
+        node = TextNode("[start](https://a.com) and end [fin](https://b.com)", TextType.PLAIN)
+        out = logic.split_nodes_link([node])
+        self.assertListEqual( out , [
+            TextNode("start", TextType.LINK, "https://a.com"),
+            TextNode(" and end ", TextType.PLAIN),
+            TextNode("fin", TextType.LINK, "https://b.com"),
+        ])
+    
+    def test_split_image_start_end(self):
+        node = TextNode("![one](https://a.png) mid ![two](https://b.png)", TextType.PLAIN)
+        out = logic.split_nodes_image([node])
+        self.assertListEqual( out , [
+            TextNode("one", TextType.IMAGE, "https://a.png"),
+            TextNode(" mid ", TextType.PLAIN),
+            TextNode("two", TextType.IMAGE, "https://b.png"),
+        ])
+    def test_split_link_back_to_back(self):
+        node = TextNode("[a](u1)[b](u2)", TextType.PLAIN)
+        out = logic.split_nodes_link([node])
+        self.assertListEqual( out , [
+            TextNode("a", TextType.LINK, "u1"),
+            TextNode("b", TextType.LINK, "u2"),
+        ])
+
+    def test_split_image_back_to_back(self):
+        node = TextNode("![a](u1)![b](u2)", TextType.PLAIN)
+        out = logic.split_nodes_image([node])
+        self.assertListEqual( out , [
+            TextNode("a", TextType.IMAGE, "u1"),
+            TextNode("b", TextType.IMAGE, "u2"),
+        ])
 
         
     temp = """def test_it_all(self):
