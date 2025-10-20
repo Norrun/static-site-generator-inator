@@ -202,7 +202,8 @@ class TestLogic(unittest.TestCase):
         ])
 
         
-    temp = """def test_it_all(self):
+    def test_it_all(self):
+        self.maxDiff = None
         text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
         result = logic.text_to_textnodes(text)
         self.assertListEqual(result,[
@@ -216,7 +217,7 @@ class TestLogic(unittest.TestCase):
     TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
     TextNode(" and a ", TextType.PLAIN),
     TextNode("link", TextType.LINK, "https://boot.dev"),
-])"""
+])
 
 if __name__ == "__main__":
     unittest.main()
