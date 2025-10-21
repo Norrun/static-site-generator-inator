@@ -64,9 +64,11 @@ def split_nodes_delimiter(old_nodes: list[TextNode], delimiter, text_type: TextT
             new_nodes.append(node)
             continue
         texts = node.text.split(delimiter)
-        if len(texts) == 1 or len(texts) % 2 != 1:
+        if len(texts) == 1:
             new_nodes.append(node)
             continue
+        if len(texts) % 2 != 1:
+            raise Exception("invalid markdown")
         for i in range(0, len(texts)):
             if i % 2 == 0:
                 if texts[i] != "":
@@ -83,3 +85,8 @@ def text_to_textnodes(text):
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)
     return nodes
+
+def markdown_to_blocks(markdown: str):
+    blocks = markdown.split("\n\n")
+    blocks = filter(lambda b: b != "",map(lambda b : b.strip(),blocks))
+    return list(blocks)
