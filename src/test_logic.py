@@ -1,7 +1,7 @@
 import unittest
 import logic
 from textnode import TextNode, TextType
-
+from debug_utils import disable_maxDiff
 
 class TestLogic(unittest.TestCase):
     
@@ -201,9 +201,9 @@ class TestLogic(unittest.TestCase):
             TextNode("b", TextType.IMAGE, "u2"),
         ])
 
-        
+    @disable_maxDiff
     def test_it_all(self):
-        self.maxDiff = None
+        
         text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
         result = logic.text_to_textnodes(text)
         self.assertListEqual(result,[
