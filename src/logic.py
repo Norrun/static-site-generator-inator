@@ -1,6 +1,7 @@
 import re
 from textnode import TextNode, TextType
 
+
 def extract_markdown_images(text):
     matches = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
     return matches 
@@ -90,3 +91,4 @@ def markdown_to_blocks(markdown: str):
     blocks = re.split(r"\n\s*\n",markdown)
     blocks = filter(lambda b: b != "",map(lambda b : b.strip(),blocks))
     return list(blocks)
+
