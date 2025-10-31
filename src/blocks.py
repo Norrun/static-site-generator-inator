@@ -8,6 +8,11 @@ class BlockType(Enum):
     UNORDERED_LIST = 5
     ORDERED_LIST = 6
 
+def markdown_to_blocks(markdown: str):
+    blocks = re.split(r"\n\s*\n",markdown)
+    blocks = filter(lambda b: b != "",map(lambda b : b.strip(),blocks))
+    return list(blocks)
+
 def block_to_blocktype(block: str):
     if re.fullmatch(r"#{1,6} .+\n?",block) is not None:
         return BlockType.HEADING
@@ -27,3 +32,13 @@ def ordered_list_helper(block: str):
         if not lines[i].startswith(f"{i + 1}. "):
             return False
     return True
+
+def markdown_to_html_node(markdown):
+    pass
+
+
+def list_assembler(ordered_list):
+    pass
+
+def unordered_lits_assembler(unordered_lits):
+    pass

@@ -87,8 +87,5 @@ def text_to_textnodes(text):
     nodes = split_nodes_link(nodes)
     return nodes
 
-def markdown_to_blocks(markdown: str):
-    blocks = re.split(r"\n\s*\n",markdown)
-    blocks = filter(lambda b: b != "",map(lambda b : b.strip(),blocks))
-    return list(blocks)
+
 
