@@ -34,21 +34,6 @@ def ordered_list_helper(block: str):
             return False
     return True
 
-def markdown_to_html_node(markdown):
-    blocks = markdown_to_blocks(markdown)
-    for block in blocks:
-        block_type = block_to_blocktype(block)
-
-def select_heading(heading_block):
-    m = re.match(r"#{1,6}",heading_block)
-    if m is None:
-        raise ValueError("invalid heading block")
-    level = len(m[0])
-    
 
 
-def list_assembler(ordered_list):
-    pass
 
-def unordered_lits_assembler(unordered_lits):
-    pass
