@@ -1,6 +1,8 @@
 from parentnode import ParentNode
 from leafnode import LeafNode
 from blocks import BlockType, markdown_to_blocks, block_to_blocktype
+from text_logic import text_to_textnodes
+from textnode import text_node_to_html_node
 import re
 
 def markdown_to_html_node(markdown):
@@ -13,7 +15,10 @@ def markdown_to_html_node(markdown):
                 node = create_heading(block)
                 nodes.append(node)
             case BlockType.CODE:
-                pass
+                create_code(block)
+
+            case BlockType.QUOTE:
+                create_quote(block)
 
                 
 
@@ -26,8 +31,12 @@ def create_heading(heading_block):
         raise ValueError("invalid heading block")
     level = len(m[0])
 
-def create_code(code_block):
+def create_code(code_block: str):
     pass
 
+def create_quote(quote: str):
+    value = quote.replace(">","")
+
 def process_leafs(content):
-    pass
+    tnodes = text_to_textnodes(content)
+    return list(map(text_node_to_html_node,tnodes))
