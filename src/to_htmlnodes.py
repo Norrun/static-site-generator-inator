@@ -23,6 +23,10 @@ def markdown_to_html_node(markdown):
 
                 
 
+def create_paragraph(paragraph:str):
+    children = process_leafs(paragraph)
+    node = ParentNode("p", children)
+    return node
 
 
 
