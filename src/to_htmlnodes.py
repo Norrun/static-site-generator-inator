@@ -54,6 +54,18 @@ def create_code(code_block: str):
 def create_quote(quote: str):
     value = quote.replace("> ","")
 
+def create_unordered_list(list: str):
+    lines = list.split("\n")
+    nodes = []
+    for line in lines:
+        # TODO test split with space to simplify function
+        post_dot = line.split(".", maxsplit = 1)[1]
+        value = post_dot.lstrip()
+        children = process_leafs(value)
+        done = ParentNode("li",children)
+        nodes.append(done)
+    return ParentNode("ul",nodes)
+
 
 def process_leafs(content):
     tnodes = text_to_textnodes(content)
