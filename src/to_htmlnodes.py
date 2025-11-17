@@ -54,7 +54,7 @@ def create_code(code_block: str):
 def create_quote(quote: str):
     value = quote.replace("> ","")
 
-def create_unordered_list(list: str):
+def create_ordered_list(list: str):
     lines = list.split("\n")
     nodes = []
     for line in lines:
@@ -64,7 +64,17 @@ def create_unordered_list(list: str):
         children = process_leafs(value)
         done = ParentNode("li",children)
         nodes.append(done)
-    return ParentNode("ul",nodes)
+    return ParentNode("ol",nodes)
+
+def create_unordered_list(list: str):
+    lines = list.split("\n")
+    nodes = []
+    for line in lines:
+        stripped = line.lstrip("- ")
+        children = process_leafs(stripped)
+        done = ParentNode("li", children)
+        nodes.append(done)
+    return ParentNode("ul", nodes)
 
 
 def process_leafs(content):
