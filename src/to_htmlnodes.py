@@ -16,10 +16,22 @@ def markdown_to_html_node(markdown):
                 node = create_heading(block)
                 nodes.append(node)
             case BlockType.CODE:
-                create_code(block)
+                node = create_code(block)
+                nodes.append(node)
 
             case BlockType.QUOTE:
-                create_quote(block)
+                node = create_quote(block)
+                nodes.append(node)
+            case BlockType.UNORDERED_LIST:
+                node = create_ordered_list(block)
+                nodes.append(node)
+            case BlockType.ORDERED_LIST:
+                node = create_ordered_list(block)
+                nodes.append(node)
+            case BlockType.PARAGRAPH:
+                node = create_paragraph(block)
+                nodes.append(node)
+
 
                 
 
@@ -52,7 +64,9 @@ def create_code(code_block: str):
 
 
 def create_quote(quote: str):
-    value = quote.replace("> ","")
+    lines = quote.splitlines()
+    for line in lines:
+        pass
 
 def create_ordered_list(list: str):
     lines = list.split("\n")
@@ -75,6 +89,10 @@ def create_unordered_list(list: str):
         done = ParentNode("li", children)
         nodes.append(done)
     return ParentNode("ul", nodes)
+
+def create_paragraph(paragraph: str):
+    children = process_leafs(paragraph)
+    return ParentNode("p",children)
 
 
 def process_leafs(content):
