@@ -65,8 +65,15 @@ def create_code(code_block: str):
 
 def create_quote(quote: str):
     lines = quote.splitlines()
+    strippeds = []
     for line in lines:
-        pass
+        stripped = line.lstrip("> ")
+        strippeds.append(stripped)
+    
+    value = "\n".join(strippeds)
+    children = process_leafs(value)
+    return ParentNode("blockquote",children)
+
 
 def create_ordered_list(list: str):
     lines = list.split("\n")
