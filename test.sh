@@ -1,1 +1,1 @@
-python3 -u -m unittest discover -s src | less
+python3 -u -m unittest discover -s src

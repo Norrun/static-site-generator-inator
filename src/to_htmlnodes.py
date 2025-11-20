@@ -31,6 +31,8 @@ def markdown_to_html_node(markdown):
             case BlockType.PARAGRAPH:
                 node = create_paragraph(block)
                 nodes.append(node)
+                
+    return ParentNode("div", nodes)
 
 
                 
@@ -55,7 +57,7 @@ def create_heading(heading_block):
 def create_code(code_block: str):
     lines =  code_block.split("\n")
     syntax_removed = lines[1:-1]
-    value = "\n".join(syntax_removed)
+    value = "\n".join(syntax_removed) + "\n"
     text_node = TextNode(value,TextType.PLAIN)
     inner_node = text_node_to_html_node(text_node)
     code = ParentNode("code",[inner_node])
@@ -98,6 +100,7 @@ def create_unordered_list(list: str):
     return ParentNode("ul", nodes)
 
 def create_paragraph(paragraph: str):
+    paragraph = paragraph.replace("\n"," ")
     children = process_leafs(paragraph)
     return ParentNode("p",children)
 
