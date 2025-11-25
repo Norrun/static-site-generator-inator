@@ -1,7 +1,11 @@
 import os, shutil
 
 def static_copy(origin, destination):
-    shutil.rmtree(destination,False,onexc=None)
+
+    if os.path.exists(destination):
+        shutil.rmtree(destination,False,onexc=None,)
+    os.mkdir(destination)
+    recursive_copy(origin, destination)
 
 def recursive_copy(origin, destination, ):
     names = os.listdir(origin)
