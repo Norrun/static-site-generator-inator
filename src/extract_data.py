@@ -6,7 +6,7 @@ def extract_stuff(tag, node: HTMLNode, jump = 0 ):
     if node.tag != tag:
         if node is ParentNode:
             for node in node.children:
-                res, jum = extract_stuff(tag,node,jump)
+                res, jump = extract_stuff(tag,node,jump)
                 if res is None:
                     continue
                 if ...
